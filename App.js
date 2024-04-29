@@ -32,7 +32,10 @@ export default function App() {
       </View>
       <View style={styles.goalsContainer}>
         {courseGoals.map((goal) => (
-          <Text key={goal}>{goal}</Text>
+          <View key={goal} style={styles.goalItem}>
+            <Text style={styles.goalText}>{goal}</Text>
+            {/* IOS中Text並不支援圓角所以使用View包起來 */}
+          </View>
         ))}
       </View>
     </View>
@@ -63,5 +66,15 @@ const styles = StyleSheet.create({
   },
   goalsContainer: {
     flex: 5,
+  },
+  goalItem: {
+    margin: 8,
+    padding: 8,
+    borderRadius: 6,
+    backgroundColor: "#5e0acc",
+    // color: "white", // 不會繼承父元素的color
+  },
+  goalText: {
+    color: "white",
   },
 });
