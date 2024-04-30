@@ -1,6 +1,14 @@
 // import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Button,
+  ScrollView,
+  FlatList,
+} from "react-native";
 
 export default function App() {
   const [enteredGoalText, setEnteredGoalText] = useState("");
@@ -16,7 +24,7 @@ export default function App() {
     // 更推薦的做法
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
-      enteredGoalText,
+      { text: enteredGoalText, id: Math.random().toString() },
     ]);
   }
 
@@ -30,13 +38,28 @@ export default function App() {
         ></TextInput>
         <Button title="Add Goal" onPress={addGoalHandler}></Button>
       </View>
+
       <View style={styles.goalsContainer}>
-        {courseGoals.map((goal) => (
-          <View key={goal} style={styles.goalItem}>
-            <Text style={styles.goalText}>{goal}</Text>
-            {/* IOS中Text並不支援圓角所以使用View包起來 */}
-          </View>
-        ))}
+        {/* ScrollView會把所有內容都呈現出來即便不在可視範圍內,IOS中Text並不支援圓角所以使用View包起來 
+        <ScrollView>
+          {courseGoals.map((goal) => (
+            <View key={goal} style={styles.goalItem}>
+              <Text style={styles.goalText}>{goal}</Text>              
+            </View>
+          ))}
+        </ScrollView> */}
+
+        <FlatList
+          data={courseGoals}
+          keyExtractor={(item, index) => item.id}
+          renderItem={(itemData) => {
+            return (
+              <View style={styles.goalItem}>
+                <Text style={styles.goalText}>{itemData.item.text}</Text>
+              </View>
+            );
+          }}
+        />
       </View>
     </View>
   );
